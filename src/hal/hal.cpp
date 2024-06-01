@@ -15,8 +15,8 @@ void HAL::Init()
         Serial.printf("lv_port_disp_init malloc failed!\n");
     power_init();
     motor_init();
-
     knob_init();
+    
     // super_dial_init();
 }
 

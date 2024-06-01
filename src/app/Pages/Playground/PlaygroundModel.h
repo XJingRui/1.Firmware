@@ -17,7 +17,7 @@ namespace Page
 class PlaygroundModel
 {
 public:
-    int16_t app;
+    int16_t app; //计数转动模式
     void Init();
     void Deinit();
     virtual void GetKnobStatus(PlaygroundInfo *info);

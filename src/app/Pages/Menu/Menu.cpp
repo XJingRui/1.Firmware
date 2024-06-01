@@ -46,13 +46,13 @@ void Menu::onViewWillAppear()
 	timer = lv_timer_create(onTimerUpdate, 100, this);
 	lv_timer_ready(timer);
 
-	View.SetScrollToY(root, -LV_VER_RES, LV_ANIM_OFF);
+	View.SetScrollToX(root, -LV_VER_RES, LV_ANIM_OFF);
 	lv_obj_fade_in(root, 300, 0);
 }
 
 void Menu::onViewDidAppear()
 {
-	View.onFocus(View.ui.group);
+	View.onFocusX(View.ui.group);
 }
 
 void Menu::onViewWillDisappear()

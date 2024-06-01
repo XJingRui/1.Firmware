@@ -13,7 +13,7 @@ void MenuView::Create(lv_obj_t* root)
 	lv_obj_set_style_bg_opa(root, LV_OPA_COVER, 0);
 	lv_obj_set_style_pad_ver(root, ITEM_PAD, 0);
 
-	lv_obj_set_flex_flow(root, LV_FLEX_FLOW_COLUMN);
+	lv_obj_set_flex_flow(root, LV_FLEX_FLOW_ROW );
 	lv_obj_set_flex_align(
 		root,
 		LV_FLEX_ALIGN_START,
@@ -89,32 +89,6 @@ void MenuView::Create(lv_obj_t* root)
 	);
 	
 
-
-
-	// /* Item Battery */
-	// Item_Create(
-	// 	&ui.battery,
-	// 	root,
-	// 	"Battery",
-	// 	"battery_info",
-
-	// 	"Usage\n"
-	// 	"Voltage\n"
-	// 	"Status"
-	// );
-
-	// /* Item Storage */
-	// Item_Create(
-	// 	&ui.storage,
-	// 	root,
-	// 	"Storage",
-	// 	"storage",
-
-	// 	"Detect\n"
-	// 	"Size\n"
-	// 	"Version"
-	// );
-
 	
 	Group_Init();
 }
@@ -122,7 +96,7 @@ void MenuView::Create(lv_obj_t* root)
 void MenuView::Group_Init()
 {
 	ui.group = lv_group_create();
-	lv_group_set_focus_cb(ui.group, onFocus);
+	lv_group_set_focus_cb(ui.group, onFocusX);
 	lv_indev_set_group(lv_get_indev(LV_INDEV_TYPE_ENCODER), ui.group);
 
 	lv_group_add_obj(ui.group, ui.dialpad.icon);
@@ -130,8 +104,6 @@ void MenuView::Group_Init()
 	lv_group_add_obj(ui.group, ui.hass.icon);
 	lv_group_add_obj(ui.group, ui.system.icon);
 	lv_group_add_obj(ui.group, ui.setting.icon);
-	// lv_group_add_obj(ui.group, ui.battery.icon);
-	// lv_group_add_obj(ui.group, ui.storage.icon);
 
 	lv_group_focus_obj(ui.switches.icon);
 }
@@ -149,6 +121,14 @@ void MenuView::SetScrollToY(lv_obj_t* obj, lv_coord_t y, lv_anim_enable_t en)
 
 	lv_obj_scroll_by(obj, 0, diff, en);
 }
+void MenuView::SetScrollToX(lv_obj_t* obj, lv_coord_t x, lv_anim_enable_t en)
+{
+    lv_coord_t scroll_x = lv_obj_get_scroll_x(obj);
+    lv_coord_t diff = -x + scroll_x;
+
+    lv_obj_scroll_by(obj, diff, 0, en);
+}
+
 
 void MenuView::onFocus(lv_group_t* g)
 {
@@ -157,6 +137,15 @@ void MenuView::onFocus(lv_group_t* g)
 	lv_coord_t y = lv_obj_get_y(cont);
 	lv_obj_scroll_to_y(lv_obj_get_parent(cont), y, LV_ANIM_ON);
 }
+void MenuView::onFocusX(lv_group_t* g)
+{
+    lv_obj_t* icon = lv_group_get_focused(g);
+    lv_obj_t* cont = lv_obj_get_parent(icon);
+    lv_coord_t x = lv_obj_get_x(cont);
+    lv_obj_scroll_to_x(lv_obj_get_parent(cont), x, LV_ANIM_ON);
+    LV_LOG_WARN("onFocusX");
+}
+
 
 void MenuView::Style_Init()
 {

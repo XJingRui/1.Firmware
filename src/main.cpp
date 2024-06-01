@@ -6,7 +6,7 @@
 #include "hal/hal.h"
 #include "hal/nvs.h"
 #include "web/WiFiAsyncWebServer.h"
-
+// 按键操作库  短按  长按
 void push_handler(ButtonEvent* btn, int event)
 {
     if (event == ButtonEvent::EVENT_PRESSED)
@@ -28,7 +28,7 @@ void setup() {
     HAL::Init();
     nvs_init();
     ffat_init();
-    // strip_init();
+    strip_init();
     // HWSerial.begin(115200);
     display_init();
     App_Init();
@@ -40,6 +40,6 @@ void loop() {
 
     // strip_start(currentMillis);
 
-    HAL::Update();
+    //HAL::Update();
     // delay(10);
 }

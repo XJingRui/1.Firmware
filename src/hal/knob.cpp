@@ -49,11 +49,13 @@ static void Encoder_PushHandler(ButtonEvent* btn, int event)
         ;
     } else if (event == ButtonEvent::EVENT_RELEASED)
     {
+        Serial.printf("push is released\n");
         // HAL::Buzz_Tone(700, 20);
         // EncoderDiffDisable = false;
         ;
     } else if (event == ButtonEvent::EVENT_LONG_PRESSED)
     {
+        Serial.printf("push is long pused\n");
         // HAL::Audio_PlayMusic("Shutdown");
         // HAL::Power_Shutdown();
         ;

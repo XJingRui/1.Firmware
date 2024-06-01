@@ -12,10 +12,10 @@ class PlaygroundView
 {
 public:
 
-    int32_t MAX_VALUE = 100;
-    int32_t MIN_VALUE = 0;
-    int32_t SCALE_LEFT_BOUND_TICKS = 200;
-    int32_t SCALE_ANGLE_RANGE = 140;
+    int32_t MAX_VALUE = 100;   //表盘最大值
+    int32_t MIN_VALUE = 0;     //表盘最小值
+    int32_t SCALE_LEFT_BOUND_TICKS = 160;
+    int32_t SCALE_ANGLE_RANGE = 220;
     int32_t SCALE_RIGHT_BOUND_TICKS = SCALE_LEFT_BOUND_TICKS + SCALE_ANGLE_RANGE;
     int32_t ARC_START_ROTATION = 120;
 

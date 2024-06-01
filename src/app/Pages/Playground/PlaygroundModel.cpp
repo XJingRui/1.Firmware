@@ -14,7 +14,7 @@ int now_pos = 0;
 int last_pos = 0;
 int PlaygroundModel::MAX_VALUE = 100;
 int PlaygroundModel::MIN_VALUE = 0;
-int PlaygroundModel::knob_value = 50;
+int PlaygroundModel::knob_value = 50;  // 旋钮值
 
 void PlaygroundModel::GetKnobStatus(PlaygroundInfo *info)
 {
@@ -51,14 +51,17 @@ void PlaygroundModel::SetPlaygroundMode(int16_t mode)
 
 void PlaygroundModel::ChangeMotorMode(int mode)
 {
-    knob_value = 0;
+    // 初始为0
+    knob_value = 0;  
     printf("MenuModel: Change Motor Mode [%d]\n", mode);
+    // 设置电机信息：
     AccountSystem::Motor_Info_t info;
     info.cmd = AccountSystem::MOTOR_CMD_CHANGE_MODE;
     info.motor_mode = mode;
     info.init_position = 0;
     // 第一个参数是通知发布者，即本 Account 应该 subscribe 第一个参数指向的 Account 
-    account->Notify("Motor", &info, sizeof(info));  
+    //    通知电机：
+     account->Notify("Motor", &info, sizeof(info));  
 }
 
 void PlaygroundModel::ChangeMotorModeWithInitPosition(int mode, int init_position)

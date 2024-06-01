@@ -6,20 +6,20 @@ using namespace Page;
 typedef struct {
 	MOTOR_RUNNING_MODE_E motor_mode;
 } app_mode_config_t;
-
+// 指定初始化器”（designated initializer），它允许开发者在初始化结构体或数组时明确地指定要初始化的成员。
 app_mode_config_t app_config[] = {
 	[PLAYGROUND_MODE_NO_EFFECTS] = {
 		.motor_mode = MOTOR_UNBOUND_NO_DETENTS,
-	},
+	},//无束缚、无棘轮
 	[PLAYGROUND_MODE_FINE_DETENTS] = {
 		.motor_mode = MOTOR_UNBOUND_FINE_DETENTS,
-	},
+	},//无束缚、有精细棘轮
 	[PLAYGROUND_MODE_BOUND] = {
-		.motor_mode = MOTOR_BOUND_0_12_NO_DETENTS,
-	},
+		.motor_mode = MOTOR_UNBOUND_COARSE_DETENTS,// 把4 改为 3
+	},//即有束缚 无棘轮
 	[PLAYGROUND_MODE_ON_OFF] = {
 		.motor_mode = MOTOR_ON_OFF_STRONG_DETENTS,
-	},
+	},//开关控制、有强棘轮
 	[APP_MODE_SUPER_DIAL] = {
 		.motor_mode = MOTOR_SUPER_DIAL,
 	},
@@ -55,6 +55,7 @@ void Playground::onViewLoad()
 		app = *((int16_t *)priv.Stash.ptr);
 		printf("\nPlayground: app = %d\n", app);
 	}
+	printf("\nlenientpg: app = %d\n", app);
 	switch (app) {
 		case PLAYGROUND_MODE_NO_EFFECTS:
 			Model = new PlaygroundModel();
@@ -64,14 +65,14 @@ void Playground::onViewLoad()
 			break;
 	};
 
-	Model->Init();
+	Model->Init(); 
 	View->Create(root);
 	
 	// lv_label_set_text(View->ui.labelTitle, Name);
-
+// 回调 切换模式 
 	AttachEvent(root);
 	AttachEvent(View->ui.meter);
-
+  
 }
 
 void Playground::onViewDidLoad()
@@ -86,7 +87,7 @@ void Playground::onViewWillAppear()
 	Model->SetPlaygroundMode(app);
 	View->SetPlaygroundMode(app);
 
-	timer = lv_timer_create(onTimerUpdate, 10, this);
+	timer = lv_timer_create(onTimerUpdate, 10, this);  //定时器用来处理数据
 }
 
 void Playground::onViewDidAppear()
@@ -101,13 +102,13 @@ void Playground::onViewWillDisappear()
 
 void Playground::onViewDidDisappear()
 {
-	lv_timer_del(timer);
+	lv_timer_del(timer);  //删除定时器
 }
 
 void Playground::onViewDidUnload()
 {
-	View->Delete();
-	Model->Deinit();
+	View->Delete();    //清除页面
+	Model->Deinit();   //清除数据订阅
 
 	delete View;
 	delete Model;
@@ -147,6 +148,7 @@ void Playground::onTimerUpdate(lv_timer_t* timer)
 
 void Playground::PlayEventHandler(lv_event_t* event, lv_event_code_t code)
 {
+	// ============= 2 ==============
 	if (code == LV_EVENT_PRESSED) {
 		
 		int app = Model->app + 1;
@@ -174,12 +176,13 @@ void Playground::onEvent(lv_event_t* event)
 	lv_event_code_t code = lv_event_get_code(event);
 	auto* instance = (Playground*)lv_obj_get_user_data(obj);
 
-	switch (app) {
-		case PLAYGROUND_MODE_NO_EFFECTS:
+	switch (app) { 
 		case PLAYGROUND_MODE_FINE_DETENTS:
 		case PLAYGROUND_MODE_BOUND:
 		case PLAYGROUND_MODE_ON_OFF:
+		case PLAYGROUND_MODE_NO_EFFECTS:
 			instance->PlayEventHandler(event, code);
+			// ============= 1 ==============
 			break;
 		default:
 			break;
